@@ -7,6 +7,7 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 
 public class ResourseLoader {
     private static TextureAtlas atlas;
@@ -30,6 +31,7 @@ public class ResourseLoader {
     public static Sprite[] colorsStarArray = new Sprite[7];
     private static Preferences preferences;
 
+    public static Skin skin;
 
     public static void load() {
         preferences = Gdx.app.getPreferences("BubbleBoom");
@@ -39,8 +41,23 @@ public class ResourseLoader {
 
         atlas = new TextureAtlas(Gdx.files.internal("Texture/Texture.pack"), true);
 
+        skin = new Skin(atlas);
+
         logo = new Sprite(atlas.findRegion("Info"));
         logo.flip(false, true);
+        bg = new Sprite(atlas.findRegion("BackgroundMain"));
+        bg.flip(false, true);
+        plybtn = new Sprite(atlas.findRegion("OnSound"));
+        plybtn.flip(false, true);
+        soundOn = new Sprite(atlas.findRegion("OnSound"));
+        soundOn.flip(false, true);
+
+        bgplay = new Sprite(atlas.findRegion("BackgroundGame"));
+        bgplay.flip(false, true);
+
+
+        font = new BitmapFont(Gdx.files.internal("fonts/text.fnt"));
+        font.getData().setScale(0.5F, 0.6F);
 
        /* settings = new Sprite(atlas.findRegion("Settings"));
         settings.flip(false, true);
@@ -66,12 +83,9 @@ public class ResourseLoader {
         TimeImg.flip(false, true);
         StepImg = new Sprite(atlas.findRegion("Time"));
         StepImg.flip(false, true);
-        plybtn = new Sprite(atlas.findRegion("OnSound"));
-        plybtn.flip(false, true);
-        bg = new Sprite(atlas.findRegion("BackgroundMain"));
-        bg.flip(false, true);
-        bgplay = new Sprite(atlas.findRegion("BackgroundGame"));
-        bgplay.flip(false, true);
+
+
+
         bgLvl = new Sprite(atlas.findRegion("LVL"));
         bgLvl.flip(false, true);
         circBlue = new Sprite(atlas.findRegion("BaloonBlue"));
