@@ -56,38 +56,7 @@ public class ResourseLoader {
         bgplay.flip(false, true);
 
 
-        font = new BitmapFont(Gdx.files.internal("fonts/text.fnt"));
-        font.getData().setScale(0.5F, 0.6F);
 
-       /* settings = new Sprite(atlas.findRegion("Settings"));
-        settings.flip(false, true);
-        info = new Sprite(atlas.findRegion("Info"));
-        info.flip(false, true);
-        gameType = new Sprite(atlas.findRegion("typeGame"));
-        gameType.flip(false, true);
-        exit = new Sprite(atlas.findRegion("exit"));
-        exit.flip(false, true);
-        win = new Sprite(atlas.findRegion("win"));
-        win.flip(false, true);
-        progressStart = new Sprite(atlas.findRegion("progressStart"));
-        progressStart.flip(false, true);
-        soundOn = new Sprite(atlas.findRegion("OnSound"));
-        soundOn.flip(false, true);
-        soundOff = new Sprite(atlas.findRegion("OffSound"));
-        soundOff.flip(false, true);
-        HighScore = new Sprite(atlas.findRegion("HighScore"));
-        HighScore.flip(false, true);
-        Score = new Sprite(atlas.findRegion("Score"));
-        Score.flip(false, true);
-        TimeImg = new Sprite(atlas.findRegion("Time"));
-        TimeImg.flip(false, true);
-        StepImg = new Sprite(atlas.findRegion("Time"));
-        StepImg.flip(false, true);
-
-
-
-        bgLvl = new Sprite(atlas.findRegion("LVL"));
-        bgLvl.flip(false, true);
         circBlue = new Sprite(atlas.findRegion("BaloonBlue"));
         circBlue.flip(false, true);
         circBlue2 = new Sprite(atlas.findRegion("BaloonLightBlue"));
@@ -126,6 +95,7 @@ public class ResourseLoader {
         circYellowStar.flip(false, true);
         circBlack = new Sprite(atlas.findRegion("BaloonBlack"));
         circBlack.flip(false, true);
+
         colorsArray[0] = new Sprite(circBlack);
         colorsArray[1] = new Sprite(circBlue);
         colorsArray[2] = new Sprite(circBlue2);
@@ -133,6 +103,42 @@ public class ResourseLoader {
         colorsArray[4] = new Sprite(circPurple);
         colorsArray[5] = new Sprite(circRed);
         colorsArray[6] = new Sprite(circYellow);
+
+
+        font = new BitmapFont(Gdx.files.internal("fonts/text.fnt"));
+        font.getData().setScale(0.5F, 0.6F);
+
+       /* settings = new Sprite(atlas.findRegion("Settings"));
+        settings.flip(false, true);
+        info = new Sprite(atlas.findRegion("Info"));
+        info.flip(false, true);
+        gameType = new Sprite(atlas.findRegion("typeGame"));
+        gameType.flip(false, true);
+        exit = new Sprite(atlas.findRegion("exit"));
+        exit.flip(false, true);
+        win = new Sprite(atlas.findRegion("win"));
+        win.flip(false, true);
+        progressStart = new Sprite(atlas.findRegion("progressStart"));
+        progressStart.flip(false, true);
+        soundOn = new Sprite(atlas.findRegion("OnSound"));
+        soundOn.flip(false, true);
+        soundOff = new Sprite(atlas.findRegion("OffSound"));
+        soundOff.flip(false, true);
+        HighScore = new Sprite(atlas.findRegion("HighScore"));
+        HighScore.flip(false, true);
+        Score = new Sprite(atlas.findRegion("Score"));
+        Score.flip(false, true);
+        TimeImg = new Sprite(atlas.findRegion("Time"));
+        TimeImg.flip(false, true);
+        StepImg = new Sprite(atlas.findRegion("Time"));
+        StepImg.flip(false, true);
+
+
+
+        bgLvl = new Sprite(atlas.findRegion("LVL"));
+        bgLvl.flip(false, true);
+
+
         colorsGrayArray[0] = new Sprite(circBlack);
         colorsGrayArray[1] = new Sprite(circBlueGrey);
         colorsGrayArray[2] = new Sprite(circBlue2Grey);

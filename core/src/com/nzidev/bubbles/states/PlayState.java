@@ -6,10 +6,12 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector3;
 import com.nzidev.bubbles.loader.ConstantLoader;
 import com.nzidev.bubbles.loader.ResourseLoader;
+import com.nzidev.bubbles.tools.Matrix;
 
 public class PlayState extends State {
     Vector3 touchPos;
     private Sprite backgroundplay;
+    private Matrix matrix;
 
     public PlayState(GameStateManager gsm) {
         super(gsm);
@@ -17,6 +19,7 @@ public class PlayState extends State {
         touchPos = new Vector3();
         Gdx.input.setCatchBackKey(true);
         backgroundplay = new Sprite(ResourseLoader.bgplay);
+        matrix = new Matrix(this, (byte)8, (byte)3);
     }
 
     @Override
@@ -37,6 +40,7 @@ public class PlayState extends State {
         sb.disableBlending();
         sb.draw(backgroundplay, 0,0, ConstantLoader.screenWidth, ConstantLoader.screenHeight);
         sb.enableBlending();
+        matrix.drawCircles(sb, runTime);
         sb.end();
     }
 
