@@ -13,7 +13,7 @@ public class ResourseLoader {
     private static TextureAtlas atlas;
     public static Sprite logo, bg, bgplay,bgLvl, info, gameType, exit, win, settings ;
     public static Sprite circBlue, circBlue2, circGreen,circPurple, circRed, circYellow;
-    public static Sprite circBlueGrey, circBlue2Grey, circGreenGrey, circPurpleGrey, circRedGrey, circYellowGrey, circBlueStar,circBlue2Star, circGreenStar, circPurpleStar;
+    public static Sprite circBlueGrey, circBlue2Grey, circGreenGrey, circPurpleGrey, circRedGrey, circYellowGrey, circBlueStar,circBlue2Star, circGreenStar, circPurpleStar,branch;
     public static Sprite circRedStar, circYellowStar, circBlack;
 
     public static Sprite plybtn, progressStart, soundOn, soundOff, Score, HighScore, StepImg, TimeImg, boom1, boom2, boom3, soulOfBaloon;
@@ -104,6 +104,8 @@ public class ResourseLoader {
         colorsArray[5] = new Sprite(circRed);
         colorsArray[6] = new Sprite(circYellow);
 
+        branch = new Sprite(atlas.findRegion("branch"));
+        branch.flip(false, true);
 
         font = new BitmapFont(Gdx.files.internal("fonts/text.fnt"));
         font.getData().setScale(0.5F, 0.6F);

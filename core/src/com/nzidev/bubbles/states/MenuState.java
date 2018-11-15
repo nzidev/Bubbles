@@ -11,6 +11,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.nzidev.bubbles.loader.ConstantLoader;
+import com.nzidev.bubbles.loader.LevelLoader;
 import com.nzidev.bubbles.loader.ResourseLoader;
 
 public class MenuState extends State{
@@ -69,7 +70,7 @@ public class MenuState extends State{
         if(playButtonClick)
         {
             System.out.println("Button PlayState");
-            gsm.set(new PlayState(gsm));
+            gsm.set(new PlayState(gsm, LevelLoader.levels[2]));
             playButtonClick = false;
         }
     }

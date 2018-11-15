@@ -12,14 +12,18 @@ public class PlayState extends State {
     Vector3 touchPos;
     private Sprite backgroundplay;
     private Matrix matrix;
+    private String[] levelSetting;
+    private String selectLevelSetting;
 
-    public PlayState(GameStateManager gsm) {
+    public PlayState(GameStateManager gsm, String selectLevelSetting) {
         super(gsm);
         camera.setToOrtho(false, ConstantLoader.screenWidth, ConstantLoader.screenHeight);
         touchPos = new Vector3();
         Gdx.input.setCatchBackKey(true);
         backgroundplay = new Sprite(ResourseLoader.bgplay);
-        matrix = new Matrix(this, (byte)8, (byte)3);
+        this.selectLevelSetting = selectLevelSetting;
+        levelSetting = selectLevelSetting.split(";");
+        matrix = new Matrix(this, Byte.parseByte (levelSetting[1]), Byte.parseByte (levelSetting[2]),levelSetting[0]);
     }
 
     @Override
@@ -40,7 +44,8 @@ public class PlayState extends State {
         sb.disableBlending();
         sb.draw(backgroundplay, 0,0, ConstantLoader.screenWidth, ConstantLoader.screenHeight);
         sb.enableBlending();
-        matrix.drawCircles(sb, runTime);
+        matrix.drawCircles(sb);
+        matrix.drawBranches(sb);
         sb.end();
     }
 

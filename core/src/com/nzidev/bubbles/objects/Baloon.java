@@ -11,13 +11,18 @@ public class Baloon extends object {
     private BaloonState states;
     public Sprite circleSprite;
     private Circle boundsCircle;
-    public byte color;
+    public short color;
+    public int id;
     public enum BaloonState{
         NORMAL, GREY, BLACK, CROSS, BOOM
     }
-    public Baloon(short color, float x, float y) {
+
+
+
+    public Baloon(short color, float x, float y, int id) {
         super(x, y);
 
+        this.id = id;
 
         velocity = new Vector2(0,0);
         states = BaloonState.NORMAL;
@@ -29,7 +34,7 @@ public class Baloon extends object {
         return color;
     }
 
-    public void setColor(byte color) {
+    public void setColor(short color) {
         this.color = color;
         changeColor(color);
     }
@@ -55,6 +60,6 @@ public class Baloon extends object {
     public Sprite getCircleSprite() {
         return circleSprite;
     }
-
+    public int getId() { return id;}
 
 }
