@@ -3,6 +3,7 @@ package com.nzidev.bubbles.objects;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.math.Circle;
+import com.badlogic.gdx.math.Intersector;
 import com.badlogic.gdx.math.Vector2;
 import com.nzidev.bubbles.loader.ConstantLoader;
 import com.nzidev.bubbles.loader.ResourseLoader;
@@ -98,5 +99,9 @@ public class Baloon extends object {
         this.position.x = x;
         this.position.y = y;
         boundsCircle.setPosition(x,y);
+    }
+
+    public boolean collides(Circle player){
+        return Intersector.overlaps(player, boundsCircle);
     }
 }

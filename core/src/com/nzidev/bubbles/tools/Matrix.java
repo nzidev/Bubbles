@@ -2,6 +2,7 @@ package com.nzidev.bubbles.tools;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.math.Circle;
 import com.badlogic.gdx.utils.Array;
 import com.nzidev.bubbles.loader.ConstantLoader;
 import com.nzidev.bubbles.loader.LevelLoader;
@@ -15,6 +16,7 @@ import java.util.Random;
 
 import static com.nzidev.bubbles.loader.ConstantLoader.circleRadius;
 
+//class for working with matrix of game area, structure and logic of game area
 public class Matrix {
     private PlayState playState;
     private byte count;
@@ -29,6 +31,7 @@ public class Matrix {
     private byte[][] branchArray;
     private float evX,evY,dragX,dragY;
     private boolean drag = false;
+    private Circle playerCircle;
     public Matrix(PlayState playState,byte count,byte colors, String lvlstr) {
 
         this.lvl = Byte.parseByte(lvlstr);
@@ -37,6 +40,8 @@ public class Matrix {
         this.colors = colors;
         screenWidth =  ConstantLoader.screenWidth;
         screenHeight = ConstantLoader.screenHeight;
+
+        playerCircle = new Circle(0, 0, circleRadius / 2); // Need object Circle for Intersector.overlaps function in Baloon.java
         random = new Random();
         branchArrayStr = LevelLoader.stonesLevel[lvl].split(";");
         branchArray = new byte[branchArrayStr.length][2];
@@ -89,7 +94,7 @@ public class Matrix {
 
                 if(!branchFlag) {
                     color = (byte) (random.nextInt(colors + 1) + 1);
-                    this.circles.add(new Baloon(color, x, y, i * j));
+                    this.circles.add(new Baloon(color, x, y, count*i + j));
                 }
                 branchFlag = false;
             }
@@ -98,9 +103,9 @@ public class Matrix {
 
 
     public void ClickCircle(float x, float y) {  //if player click on baloon
-
         evX = x;
         evY = y;
+        //*............Click baloon.............*//
         if (Gdx.input.justTouched())
         {
             for (byte i = 0; i < circles.size; i++) {
@@ -109,22 +114,28 @@ public class Matrix {
                     dragCircle = i;
                     dragX = evX - circles.get(i).getPosition().x;
                     dragY = evY - circles.get(i).getPosition().y;
-                    /*Gdx.app.log("Matrix", " minx  " + minx);
-                    Gdx.app.log("Matrix", " dragX  " + dragX);
-                    Gdx.app.log("Matrix", " dragY  " + dragY);
-
-                    Gdx.app.log("Matrix", " circles.get(i).getPosition().x  " + circles.get(i).getPosition().x);
-                    Gdx.app.log("Matrix", " getStartX  " + circles.get(i).getStartX());*/
+                    /*Gdx.app.log("Matrix", " minx  " + minx);                   */
                 }
             }
         }
+
+        //*............Move Clicked baloon.............*/
         if (Gdx.input.isTouched() && drag) {
-
             circles.get(dragCircle).circleMove(evX - dragX, evY - dragY, circles.size);
-
+            playerCircle.setPosition(circles.get(dragCircle).getPosition().x, circles.get(dragCircle).getPosition().y);
         }
 
-     //   changed = false;
+        //*...........Drop off.........*/
+        if (!(Gdx.input.isTouched()) && drag) {
+            drag = false;
+            for (int i = 0; i < circles.size; i++) {
+                if (i != dragCircle && circles.get(i).collides(playerCircle)) {
+                    Gdx.app.log("Matrix", " Drag  " + circles.get(dragCircle).getId());
+                    Gdx.app.log("Matrix", " Drop   " + circles.get(i).getId());
+                }
+            }
+
+        }
     }
 
     public void drawCircles(SpriteBatch sb) {
