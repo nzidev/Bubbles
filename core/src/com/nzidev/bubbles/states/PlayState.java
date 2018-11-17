@@ -30,11 +30,15 @@ public class PlayState extends State {
     protected void handleInput() {
         touchPos.set(Gdx.input.getX(), Gdx.input.getY(), 0);
         camera.unproject(touchPos);
+
+        if (Gdx.input.isTouched()) {
+            matrix.ClickCircle(touchPos.x, touchPos.y);
+        }
     }
 
     @Override
     public void update(float dt) {
-
+        handleInput();
     }
 
     @Override

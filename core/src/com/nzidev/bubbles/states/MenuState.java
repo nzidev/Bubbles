@@ -70,7 +70,7 @@ public class MenuState extends State{
         if(playButtonClick)
         {
             System.out.println("Button PlayState");
-            gsm.set(new PlayState(gsm, LevelLoader.levels[2]));
+            gsm.set(new PlayState(gsm, LevelLoader.levels[1]));
             playButtonClick = false;
         }
     }

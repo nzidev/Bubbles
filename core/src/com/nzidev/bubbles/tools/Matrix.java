@@ -24,9 +24,11 @@ public class Matrix {
     private Array<Baloon> circles;
     private Array<Branch> branches;
     private float stepX, stepY,minx,miny, x, y;
-    private byte lvl;
+    private byte lvl, dragCircle;
     private String[] branchArrayStr;
     private byte[][] branchArray;
+    private float evX,evY,dragX,dragY;
+    private boolean drag = false;
     public Matrix(PlayState playState,byte count,byte colors, String lvlstr) {
 
         this.lvl = Byte.parseByte(lvlstr);
@@ -42,7 +44,7 @@ public class Matrix {
         {
             branchArray[i][0] = Byte.decode(branchArrayStr[i].split("#")[0]);
             branchArray[i][1] = Byte.decode(branchArrayStr[i].split("#")[1]);
-            Gdx.app.log("Matrix", " branchArray  " + branchArray.length);
+
         }
 
 
@@ -92,6 +94,37 @@ public class Matrix {
                 branchFlag = false;
             }
         }
+    }
+
+
+    public void ClickCircle(float x, float y) {  //if player click on baloon
+
+        evX = x;
+        evY = y;
+        if (Gdx.input.justTouched())
+        {
+            for (byte i = 0; i < circles.size; i++) {
+                if (Math.pow(evX - (circles.get(i).getPosition().x + circleRadius), 2) + Math.pow(evY - (circles.get(i).getPosition().y + circleRadius), 2) <= Math.pow(circleRadius, 2)) {
+                    drag = true;
+                    dragCircle = i;
+                    dragX = evX - circles.get(i).getPosition().x;
+                    dragY = evY - circles.get(i).getPosition().y;
+                    /*Gdx.app.log("Matrix", " minx  " + minx);
+                    Gdx.app.log("Matrix", " dragX  " + dragX);
+                    Gdx.app.log("Matrix", " dragY  " + dragY);
+
+                    Gdx.app.log("Matrix", " circles.get(i).getPosition().x  " + circles.get(i).getPosition().x);
+                    Gdx.app.log("Matrix", " getStartX  " + circles.get(i).getStartX());*/
+                }
+            }
+        }
+        if (Gdx.input.isTouched() && drag) {
+
+            circles.get(dragCircle).circleMove(evX - dragX, evY - dragY, circles.size);
+
+        }
+
+     //   changed = false;
     }
 
     public void drawCircles(SpriteBatch sb) {
