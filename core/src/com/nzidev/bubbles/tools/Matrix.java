@@ -8,10 +8,8 @@ import com.nzidev.bubbles.loader.ConstantLoader;
 import com.nzidev.bubbles.loader.LevelLoader;
 import com.nzidev.bubbles.objects.Baloon;
 
-import com.nzidev.bubbles.objects.Branch;
 import com.nzidev.bubbles.states.PlayState;
 
-import java.util.Arrays;
 import java.util.Random;
 
 import static com.nzidev.bubbles.loader.ConstantLoader.circleRadius;
@@ -24,13 +22,13 @@ public class Matrix {
     private float screenWidth, screenHeight;
     private Random random;
     private Array<Baloon> circles;
-    private Array<Branch> branches;
+
     private float stepX, stepY,minx,miny, x, y;
     private byte lvl, dragCircle;
     private String[] branchArrayStr;
     private byte[][] branchArray;
     private float evX,evY,dragX,dragY;
-    private boolean drag = false;
+    private boolean drag,changed = false;
     private Circle playerCircle;
     public Matrix(PlayState playState,byte count,byte colors, String lvlstr) {
 
@@ -44,16 +42,17 @@ public class Matrix {
         playerCircle = new Circle(0, 0, circleRadius / 2); // Need object Circle for Intersector.overlaps function in Baloon.java
         random = new Random();
         branchArrayStr = LevelLoader.stonesLevel[lvl].split(";");
-        branchArray = new byte[branchArrayStr.length][2];
+
+        branchArray = new byte[branchArrayStr.length-1][2];
         for(int i=1;i<branchArrayStr.length;i++)
         {
-            branchArray[i][0] = Byte.decode(branchArrayStr[i].split("#")[0]);
-            branchArray[i][1] = Byte.decode(branchArrayStr[i].split("#")[1]);
+            branchArray[i-1][0] = Byte.decode(branchArrayStr[i].split("#")[0]);
+            branchArray[i-1][1] = Byte.decode(branchArrayStr[i].split("#")[1]);
 
         }
 
 
-        branches = new Array<Branch>();
+
         circles = new Array<Baloon>();
         stepX = (float) (circleRadius*2);
         stepY = (float) (circleRadius * 2.5);
@@ -68,14 +67,6 @@ public class Matrix {
             miny = (float) (((screenHeight * (ConstantLoader.PLAY_AREA_PROCENT / 100)) / 2) - ((count / 2) * stepY)) + (screenHeight * (ConstantLoader.DOWN_PROCENT / 100));
         }
 
-        for(int i=1;i<branchArrayStr.length;i++)
-        {
-            x = minx + branchArray[i][0] * stepX;
-            //x = minx + Float.parseFloat(branchArrayStr[i].split("#")[0]) * stepX;
-            y = miny + branchArray[i][1] * stepY;
-            this.branches.add(new Branch(x, y + circleRadius / 2));
-
-        }
 
         boolean branchFlag = false;
         for (int i = 0; i < count; i++) {
@@ -84,27 +75,76 @@ public class Matrix {
                 y = miny + j * stepY;
 
                 //change this code when understand how to do it witout "for"
-                for(int b=1;b<branchArray.length;b++)
+                for(int b=0;b<branchArray.length;b++)
                 {
                     if (branchArray[b][0] == i && branchArray[b][1] == j)
                     {
+                        x = minx + branchArray[i][0] * stepX;
+                        //x = minx + Float.parseFloat(branchArrayStr[i].split("#")[0]) * stepX;
+                        y = miny + branchArray[i][1] * stepY;
+
+                        this.circles.add(new Baloon((short)0, x, y, count*branchArray[i][0] + branchArray[i][1], Baloon.ObjectForm.Branch));
                         branchFlag = true;
                     }
                 }
 
                 if(!branchFlag) {
                     color = (byte) (random.nextInt(colors + 1) + 1);
-                    this.circles.add(new Baloon(color, x, y, count*i + j));
+                    this.circles.add(new Baloon(color, x, y, count*i + j, Baloon.ObjectForm.Baloon));
                 }
                 branchFlag = false;
             }
         }
     }
 
+    public void checkEqual() {
+        int eqal = 1;
+        int nextrowbaloon;
+
+
+        for (int i = 0; i < count; i++) {
+
+            for (int col = 0 + count * i; col < count - 1 + count * i; col++){    //col
+
+                //if (circles.get(col).getForm() == Baloon.ObjectForm.Baloon &&(col + 1) == (count - 1 + count * i) && (circles.get(col).getColor() == circles.get(col + 1).getColor())) {
+                if ((circles.get(col).getForm() == Baloon.ObjectForm.Baloon) && (circles.get(col).getColor() == circles.get(col + 1).getColor())) {
+                    Gdx.app.log("Matrix", " check j " + col);
+                }
+            }
+
+
+
+//
+//            eqal = 1;
+//            for (int j = 0 + col; j < count * count - count + col; j = j + count) {   //row
+//                if (stoneEnable && col == xStone && j ==yStone )
+//                {
+//                    continue;
+//                }
+//                //  Gdx.app.log("Matrix", " check j " + j);
+//                nextrowbaloon = j + count;
+//                if ((j == ((count * (count - 1) + col)) - count) && (circles.get(j).getColor() == circles.get(nextrowbaloon).getColor())) { //last slot
+//                    eqal++;
+//                    boom.setBoom(eqal, nextrowbaloon, count, true, circles, numDragCircle, dragCircle);
+//                    eqal = 1;
+//                } else if (circles.get(j).getColor() == circles.get(nextrowbaloon).getColor()) {
+//                    eqal++;
+//                } else {
+//                    boom.setBoom(eqal, j, count, true, circles, numDragCircle, dragCircle);
+//                    eqal = 1;
+//                }
+//                if (eqal >= 3) {
+//                    exposionStep = true;
+//                }
+//                checkRowMaybe(j, col, count);
+//            }
+        }
+    }
 
     public void ClickCircle(float x, float y) {  //if player click on baloon
         evX = x;
         evY = y;
+        changed = false;
         //*............Click baloon.............*//
         if (Gdx.input.justTouched())
         {
@@ -129,12 +169,21 @@ public class Matrix {
         if (!(Gdx.input.isTouched()) && drag) {
             drag = false;
             for (int i = 0; i < circles.size; i++) {
-                if (i != dragCircle && circles.get(i).collides(playerCircle)) {
-                    Gdx.app.log("Matrix", " Drag  " + circles.get(dragCircle).getId());
-                    Gdx.app.log("Matrix", " Drop   " + circles.get(i).getId());
+                if (i != dragCircle && circles.get(i).overlaps(playerCircle)) {
+
+                    circles.get(dragCircle).setPosition(circles.get(dragCircle).getStartX(), circles.get(dragCircle).getStartY());
+                    playerCircle.setPosition(circles.get(dragCircle).getStartX(), circles.get(dragCircle).getStartY());
+                    circles.get(i).changeBaloonColor(circles.get(dragCircle));
+                    //numDragCircle = i;
+                    changed = true;
                 }
             }
 
+            if (!changed) { //no change, return to start position
+                circles.get(dragCircle).setPosition(circles.get(dragCircle).getStartX(), circles.get(dragCircle).getStartY());
+                playerCircle.setPosition(circles.get(dragCircle).getStartX(), circles.get(dragCircle).getStartY());
+            }
+            checkEqual();
         }
     }
 
@@ -145,9 +194,4 @@ public class Matrix {
         }
     }
 
-    public void drawBranches(SpriteBatch sb) {
-        for (int i = 0; i < branches.size; i++) {
-            sb.draw(branches.get(i).getBranchSprite(), branches.get(i).getPosition().x,branches.get(i).getPosition().y);
-        }
-    }
 }

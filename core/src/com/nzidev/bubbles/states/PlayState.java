@@ -49,7 +49,7 @@ public class PlayState extends State {
         sb.draw(backgroundplay, 0,0, ConstantLoader.screenWidth, ConstantLoader.screenHeight);
         sb.enableBlending();
         matrix.drawCircles(sb);
-        matrix.drawBranches(sb);
+
         sb.end();
     }
 
